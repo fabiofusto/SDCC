@@ -28,7 +28,7 @@ export const ReportCard = ({ report }: ReportCardProps) => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span>{report.sentiment}</span>
+          <span className='text-lg lg:text-xl'>{report.sentiment}</span>
           {sentimentDisplay[report.sentiment].icon}
         </CardTitle>
         <CardDescription className="font-medium text-xs">

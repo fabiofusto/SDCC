@@ -33,7 +33,7 @@ const ReportsPage = async () => {
   if (reports.length < 1) return <ErrorBanner title='reports'/>;
 
   return (
-    <MaxWidthWrapper className="my-4 grid gap-6 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+    <MaxWidthWrapper className="my-4 grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
       {reports.map((report, i)=> (
         <ReportCard key={i} report={report} />
       ))}
