@@ -20,14 +20,14 @@ interface ReportProps {
   report: ReportType;
   confetti?: boolean;
   actions?: boolean;
-  urlPresent?:boolean
+  urlPresent?: boolean;
 }
 
 export const Report = ({
   report,
   confetti = false,
   actions = true,
-  urlPresent
+  urlPresent,
 }: ReportProps) => {
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [canDownload, setCanDownload] = useState<boolean>(
@@ -38,7 +38,19 @@ export const Report = ({
 
   const uploadReportToS3 = async () => {
     setIsLoading(true);
-    const file = await exportComponentAsPDF();
+
+    let file;
+    try {
+      file = await exportComponentAsPDF();
+    } catch (error) {
+      console.error('Error exporting component as PDF:', error);
+      return toast({
+      title: 'Error exporting component as PDF',
+      description: 'Please try again',
+      variant: 'destructive',
+      });
+    }
+    
     if (!file) {
       return toast({
         title: 'Error while creating report',
@@ -139,51 +151,60 @@ export const Report = ({
                   Result of sentiment analysis
                 </h2>
                 <p className="text-muted-foreground mt-2 text-sm lg:text-lg text-center">
-                  We analyzed the sentiment of <span className='font-bold'>{report.totalTexts}</span>{' '} texts and the average result is
+                  We analyzed the sentiment of{' '}
+                  <span className="font-bold">{report.totalTexts}</span> texts
+                  and the average result is
                 </p>
                 <div className="flex items-center gap-x-1.5 mt-2">
                   <span
-                    className={`text-lg xl:text-2xl ${sentimentDisplay[report.sentiment].color}`}
+                    className={`text-lg xl:text-2xl ${
+                      sentimentDisplay[report.sentiment].color
+                    }`}
                   >
                     {sentimentDisplay[report.sentiment].icon}
                   </span>
                   <span
-                    className={`text-2xl lg:text-3xl font-bold ${sentimentDisplay[report.sentiment].color}`}
+                    className={`text-2xl lg:text-3xl font-bold ${
+                      sentimentDisplay[report.sentiment].color
+                    }`}
                   >
                     {report.sentiment}
                   </span>
                 </div>
               </div>
               <div className="grid grid-cols-4 gap-4 mt-8">
-               <PercentageCards sentimentDisplay={sentimentDisplay} sentimentScore={sentimentScore}/>
+                <PercentageCards
+                  sentimentDisplay={sentimentDisplay}
+                  sentimentScore={sentimentScore}
+                />
               </div>
             </div>
             <div className="w-[375px] h-[250px] xl:w-[450px] lg:h-[400px] mt-8 xl:mt-0">
-              <Chart
-                score={sentimentScore}
-              />
+              <Chart score={sentimentScore} />
             </div>
           </div>
         </div>
         {actions && (
           <div className="py-4 flex items-center justify-center gap-2 w-full">
-            {!urlPresent && !canDownload && (<Button
-              disabled={isLoading || canDownload}
-              onClick={async () => await uploadReportToS3()}
-              variant="outline"
-            >
-              {canDownload ? (
-                <span className="flex items-center gap-1.5">
-                  Generate PDF <File className="size-5" />
-                </span>
-              ) : isLoading ? (
-                <Loader2 className="animate-spin text-muted-foreground size-5" />
-              ) : (
-                <span className="flex items-center gap-1.5">
-                  Generate PDF <File className="size-4" />
-                </span>
-              )}
-            </Button>)}
+            {!urlPresent && !canDownload && (
+              <Button
+                disabled={isLoading || canDownload}
+                onClick={async () => await uploadReportToS3()}
+                variant="outline"
+              >
+                {canDownload ? (
+                  <span className="flex items-center gap-1.5">
+                    Generate PDF <File className="size-5" />
+                  </span>
+                ) : isLoading ? (
+                  <Loader2 className="animate-spin text-muted-foreground size-5" />
+                ) : (
+                  <span className="flex items-center gap-1.5">
+                    Generate PDF <File className="size-4" />
+                  </span>
+                )}
+              </Button>
+            )}
             <DownloadReportButton
               reportId={report.id}
               canDownload={canDownload}

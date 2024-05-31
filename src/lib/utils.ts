@@ -45,18 +45,15 @@ export const exportComponentAsPDF = async (): Promise<File> => {
     const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
     pdf.addImage(img, 'PNG', 0, 10, imgWidth, imgHeight);
 
-    // Ottieni il blob direttamente da jsPDF
     const pdfBlob = pdf.output('blob');
 
-    // Crea un file dal blob
     const pdfFile = new File([pdfBlob], 'report.pdf', {
       type: 'application/pdf',
     });
-    
+
     //pdf.save("report.pdf")
     return pdfFile;
   } catch (error) {
-    console.error('oops, something went wrong!', error);
-    throw error;
+    throw new Error('Error exporting component as PDF');
   }
 };
