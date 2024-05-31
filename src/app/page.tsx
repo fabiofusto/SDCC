@@ -30,7 +30,7 @@ export default function Home() {
                   Cobra<span className="text-green-600">Insights</span>
                 </span>{' '}
                 let&apos;s you upload any CSV file and analyze the data that you
-                choose. ciao
+                choose.
               </p>
 
               <div className="mt-4 px-8">

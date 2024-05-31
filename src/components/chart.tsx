@@ -17,13 +17,12 @@ interface ChartProps {
   score: {
     [key: string]: number;
   };
-  logScale?: boolean
 }
 
-export const Chart = ({ score, logScale}: ChartProps) => {
+export const Chart = ({ score}: ChartProps) => {
   const data = Object.entries(score).map(([key, score]) => ({
     name: key,
-    score: logScale ? Math.max(score * 100, 0.0001) : score,
+    score: score * 100,
   }));
 
   const colors = ["rgb(22 163 74)", 'rgb(239 68 68)', 'rgb(234 179 8)', 'rgb(59 130 246)'];
@@ -38,7 +37,7 @@ export const Chart = ({ score, logScale}: ChartProps) => {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey={"name"} />
-        <YAxis scale={logScale ? 'log' : 'linear'} domain={logScale ? [0.0001, 100] : [0,1]} />
+        <YAxis scale={'linear'} domain={[0,100]} />
         <Tooltip />
         <Bar dataKey="score">
           {data.map((entry, index) => (

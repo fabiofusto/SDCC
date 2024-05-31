@@ -21,7 +21,7 @@ export const PercentageCards = ({sentimentDisplay, sentimentScore}: PercentageCa
   return (
     <>
       {Object.entries(sentimentDisplay).map(([key, { icon, color }]) => {
-        const percentage = ((sentimentScore[key] / totalScore) * 100).toFixed(2);
+        const percentage = ((sentimentScore[key] / totalScore) * 100).toFixed(1);
         return (
           <Card className="border-none drop-shadow-md" key={key}>
             <CardHeader className="flex items-center justify-between">

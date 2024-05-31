@@ -23,6 +23,7 @@ import {
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from './ui/use-toast';
+import { Loader2 } from 'lucide-react';
 
 interface SelectDialogProps {
   columns: {
@@ -33,7 +34,11 @@ interface SelectDialogProps {
   datasetId: string;
 }
 
-export const SelectDialog = ({ columns, body, datasetId }: SelectDialogProps) => {
+export const SelectDialog = ({
+  columns,
+  body,
+  datasetId,
+}: SelectDialogProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [selectedColumn, setSelectedColumn] = useState<number>(0);
   const router = useRouter();
@@ -75,12 +80,19 @@ export const SelectDialog = ({ columns, body, datasetId }: SelectDialogProps) =>
     >
       <DialogTrigger asChild>
         <div className="w-full flex justify-end items-center sm:mt-4">
-          <Button
-            variant="outline"
-            className="w-full md:w-fit my-4 lg:my-0"
-          >
-            Pick a column
-          </Button>
+          <div className="flex flex-col items-center justify-center mt-2 mb-4 w-full lg:w-fit">
+            <Button
+              disabled={isPending || columns.length === 0}
+              variant="outline"
+              className='w-full lg:w-fit'
+            >
+              {isPending ? (
+                <Loader2 className="animate-spin size-4" />
+              ) : (
+                <span>Pick a column</span>
+              )}
+            </Button>
+          </div>
         </div>
       </DialogTrigger>
       <DialogContent>
@@ -123,4 +135,3 @@ export const SelectDialog = ({ columns, body, datasetId }: SelectDialogProps) =>
     </Dialog>
   );
 };
-

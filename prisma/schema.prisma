@@ -58,16 +58,21 @@ model Dataset {
 }
 
 model Report {
-  id            String   @id @default(cuid())
-  url           String?
-  sentiment     String
-  mixedScore    Float
-  positiveScore Float
-  negativeScore Float
-  neutralScore  Float
-  datasetId     String   @unique
-  userId        String
-  createdAt     DateTime @default(now())
+  id               String   @id @default(cuid())
+  url              String?
+  sentiment        String
+  mixedAvgScore    Float
+  mixedTexts       Int
+  positiveAvgScore Float
+  positiveTexts    Int
+  negativeAvgScore Float
+  negativeTexts    Int
+  neutralAvgScore  Float
+  neutralTexts     Int
+  totalTexts       Int
+  datasetId        String   @unique
+  userId           String
+  createdAt        DateTime @default(now())
 
   dataset Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)

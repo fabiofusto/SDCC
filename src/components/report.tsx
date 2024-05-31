@@ -102,10 +102,10 @@ export const Report = ({
   }, [report.id, toast]);
 
   const sentimentScore: { [key: string]: number } = {
-    Positive: report.positiveScore,
-    Negative: report.negativeScore,
-    Mixed: report.mixedScore,
-    Neutral: report.neutralScore,
+    Positive: report.positiveAvgScore,
+    Negative: report.negativeAvgScore,
+    Mixed: report.mixedAvgScore,
+    Neutral: report.neutralAvgScore,
   };
 
   return (
@@ -132,14 +132,14 @@ export const Report = ({
             </p>
           </div>
 
-          <div className="flex flex-col xl:flex-row justify-between items-center mt-8 lg:space-x-8">
+          <div className="flex flex-col xl:flex-row justify-between items-center mt-8 xl:space-x-8">
             <div className="flex flex-col justify-between items-center">
               <div className="flex flex-col items-center justify-center">
                 <h2 className="font-bold text-xl lg:text-2xl">
                   Result of sentiment analysis
                 </h2>
                 <p className="text-muted-foreground mt-2 text-sm lg:text-lg text-center">
-                  AWS Comprehend said the sentiment in your data is
+                  We analyzed the sentiment of <span className='font-bold'>{report.totalTexts}</span>{' '} texts and the average result is
                 </p>
                 <div className="flex items-center gap-x-1.5 mt-2">
                   <span
@@ -161,7 +161,6 @@ export const Report = ({
             <div className="w-[375px] h-[250px] xl:w-[450px] lg:h-[400px] mt-8 xl:mt-0">
               <Chart
                 score={sentimentScore}
-                logScale
               />
             </div>
           </div>
