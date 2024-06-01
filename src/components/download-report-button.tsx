@@ -1,6 +1,6 @@
 'use client';
 
-import { Download, Loader2 } from 'lucide-react';
+import { File, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useState } from 'react';
 import axios from 'axios';
@@ -55,11 +55,11 @@ export const DownloadReportButton = ({ reportId, canDownload, iconSize = true}: 
       <div className='flex items-center'>
       {!iconSize ? (<span className='mr-1.5'>Download</span>) : null}
       {!canDownload ? (
-        <Download className="size-4" />
+        <File className="size-4" />
       ) : isLoading ? (
         <Loader2 className="animate-spin size-5 text-muted-foreground" />
       ) : (
-        <Download className="size-5" />
+        <File className="size-5" />
       )}</div>
     </Button>
   );

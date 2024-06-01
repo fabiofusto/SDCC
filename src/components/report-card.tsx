@@ -28,7 +28,7 @@ export const ReportCard = ({ report }: ReportCardProps) => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span className='text-lg lg:text-xl'>{report.sentiment}</span>
+          <span className="text-lg lg:text-xl">{report.sentiment}</span>
           {sentimentDisplay[report.sentiment].icon}
         </CardTitle>
         <CardDescription className="font-medium text-xs">
@@ -40,6 +40,10 @@ export const ReportCard = ({ report }: ReportCardProps) => {
           reportId={report.id}
           canDownload
         />
+        <DownloadDatasetButton
+          datasetId={report.datasetId}
+          canDownload
+        />{' '}
         <Link
           href={`/reports/${report.id}`}
           className={buttonVariants({
@@ -49,10 +53,6 @@ export const ReportCard = ({ report }: ReportCardProps) => {
         >
           <ExternalLink className="size-5" />
         </Link>
-        <DownloadDatasetButton
-          datasetId={report.datasetId}
-          canDownload
-        />
       </CardContent>
     </Card>
   );
