@@ -14,7 +14,8 @@ const { auth } = NextAuth(authConfig);
  const corsHeaders: {[key: string]: string} = {
   'Access-Control-Allow-Origin': '*', // Permetti tutte le origini, modificalo secondo le tue necessità
   'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Allow-Headers': 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+  'Access-Control-Allow-Credentials': 'true'
 };
 
 export default auth((req) => {
