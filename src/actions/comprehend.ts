@@ -10,10 +10,10 @@ import { auth } from '@/../auth';
 import { db } from '@/lib/db';
 
 const comprehendClient = new ComprehendClient({
-  region: process.env.AWS_COMPREHEND_REGION!,
+  region: process.env.COMPREHEND_REGION!,
   credentials: {
-    accessKeyId: process.env.AWS_IAM_ACCESS_KEY!,
-    secretAccessKey: process.env.AWS_IAM_SECRET_ACCESS_KEY!,
+    accessKeyId: process.env.IAM_ACCESS_KEY!,
+    secretAccessKey: process.env.IAM_SECRET_ACCESS_KEY!,
   },
 });
 

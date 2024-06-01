@@ -31,9 +31,3 @@ export const sentimentDisplay: SentimentDisplay = {
     description: 'The sentiment of the text is neutral.',
   },
 };
-
-export enum Services {
-  'AWS',
-  'Azure',
-  'Both',
-}
