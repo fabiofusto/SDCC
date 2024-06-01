@@ -21,19 +21,34 @@ export default auth((req) => {
   const isLoginRoute = nextUrl.pathname === authRoutes.Login;
   const isLogoutRoute = nextUrl.pathname === authRoutes.Logout;
 
-  const corsHeaders : {[key: string]: string} = {
-    'Access-Control-Allow-Origin': 'https://cobrainsights.xyz',
+  // CORS headers
+  const corsHeaders: {[key: string]: string} = {
+    'Access-Control-Allow-Origin': '*', // Permetti tutte le origini, modificalo secondo le tue necessità
     'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   };
 
-  //console.log({isLoggedIn, isAuthRoute, isApiAuthRoute})
-
-  if (isApiAuthRoute && !isLoginRoute && !isLogoutRoute) {
-    return undefined;
+  // Gestione delle richieste OPTIONS (preflight request)
+  if (req.method === 'OPTIONS') {
+    const response = new NextResponse(null, { status: 204 });
+    Object.keys(corsHeaders).forEach((key) => {
+      response.headers.set(key, corsHeaders[key]);
+    });
+    return response;
   }
 
+  // Se è una rotta API di autenticazione, aggiungi gli header CORS e lascia passare
+  if (isApiAuthRoute && !isLoginRoute && !isLogoutRoute) {
+    const response = NextResponse.next();
+    Object.keys(corsHeaders).forEach((key) => {
+      response.headers.set(key, corsHeaders[key]);
+    });
+    return response;
+  }
+
+  // Se è una rotta di autenticazione
   if (isAuthRoute) {
+    // Se l'utente è loggato e sta cercando di accedere alla pagina di login, reindirizza
     if (isLoggedIn && isLoginRoute) {
       const response = NextResponse.redirect(new URL(defaultLoginRedirect, nextUrl));
       Object.keys(corsHeaders).forEach((key) => {
@@ -41,19 +56,27 @@ export default auth((req) => {
       });
       return response;
     }
-
-    return undefined;
+    const response = NextResponse.next();
+    Object.keys(corsHeaders).forEach((key) => {
+      response.headers.set(key, corsHeaders[key]);
+    });
+    return response;
   }
 
+  // Se l'utente non è loggato e la rotta non è pubblica, reindirizza alla pagina di login
   if (!isLoggedIn && !isPublicRoute) {
-    const response = NextResponse.redirect(new URL(defaultLoginRedirect, nextUrl));
-      Object.keys(corsHeaders).forEach((key) => {
-        response.headers.set(key, corsHeaders[key]);
-      });
-      return response;
+    const response = NextResponse.redirect(new URL(authRoutes.Login, nextUrl));
+    Object.keys(corsHeaders).forEach((key) => {
+      response.headers.set(key, corsHeaders[key]);
+    });
+    return response;
   }
 
-  return undefined;
+  const response = NextResponse.next();
+  Object.keys(corsHeaders).forEach((key) => {
+    response.headers.set(key, corsHeaders[key]);
+  });
+  return response;
 });
 
 export const config = {
