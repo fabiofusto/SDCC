@@ -10,7 +10,23 @@ import { NextResponse } from 'next/server';
 
 const { auth } = NextAuth(authConfig);
 
+ // CORS headers
+ const corsHeaders: {[key: string]: string} = {
+  'Access-Control-Allow-Origin': '*', // Permetti tutte le origini, modificalo secondo le tue necessità
+  'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
 export default auth((req) => {
+  // Gestione delle richieste OPTIONS (preflight request)
+  if (req.method === 'OPTIONS') {
+    const response = new NextResponse(null, { status: 204 });
+    Object.keys(corsHeaders).forEach((key) => {
+      response.headers.set(key, corsHeaders[key]);
+    });
+    return response;
+  }
+
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
 
@@ -21,22 +37,7 @@ export default auth((req) => {
   const isLoginRoute = nextUrl.pathname === authRoutes.Login;
   const isLogoutRoute = nextUrl.pathname === authRoutes.Logout;
 
-  // CORS headers
-  const corsHeaders: {[key: string]: string} = {
-    'Access-Control-Allow-Origin': '*', // Permetti tutte le origini, modificalo secondo le tue necessità
-    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  };
-
-  // Gestione delle richieste OPTIONS (preflight request)
-  if (req.method === 'OPTIONS') {
-    const response = new NextResponse(null, { status: 204 });
-    Object.keys(corsHeaders).forEach((key) => {
-      response.headers.set(key, corsHeaders[key]);
-    });
-    return response;
-  }
-
+ 
   // Se è una rotta API di autenticazione, aggiungi gli header CORS e lascia passare
   if (isApiAuthRoute && !isLoginRoute && !isLogoutRoute) {
     const response = NextResponse.next();
