@@ -19,7 +19,7 @@ const s3 = new S3Client({
 
 const acceptedDatasetTypes = ['text/csv'];
 
-const maxFileSize = 1024 * 1024 * 10; // 10MB
+const maxFileSize = 1024 * 1024 * 10;
 
 export async function getDatasetSignedURL(
   type: string,
