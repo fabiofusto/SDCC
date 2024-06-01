@@ -34,26 +34,15 @@ export const Report = ({
     urlPresent ? true : false
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [file, setFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   const uploadReportToS3 = async () => {
     setIsLoading(true);
 
-    let file;
-    try {
-      file = await exportComponentAsPDF();
-    } catch (error) {
-      console.error('Error exporting component as PDF:', error);
-      return toast({
-      title: 'Error exporting component as PDF',
-      description: 'Please try again',
-      variant: 'destructive',
-      });
-    }
-    
     if (!file) {
       return toast({
-        title: 'Error while creating report',
+        title: 'Error while generating report',
         description: 'Please try again',
         variant: 'destructive',
       });
@@ -110,8 +99,23 @@ export const Report = ({
   };
 
   useEffect(() => {
+    const generatePDF = async () => {
+      try {
+        const pdfFile = await exportComponentAsPDF();
+        setFile(pdfFile);
+      } catch (error) {
+        console.error('Error exporting component as PDF:', error);
+        return toast({
+          title: 'Error exporting component as PDF',
+          description: 'Please try again',
+          variant: 'destructive',
+        });
+      }
+    };
     setShowConfetti(true);
-  }, [report.id, toast]);
+    generatePDF();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const sentimentScore: { [key: string]: number } = {
     Positive: report.positiveAvgScore,

@@ -19,8 +19,6 @@ const ReportPage = async ({ params }: {params: ReportPageProps}) => {
 
   if (!report) return notFound();
 
-  console.log(report);
-
   return (
     <MaxWidthWrapper>
       <Report

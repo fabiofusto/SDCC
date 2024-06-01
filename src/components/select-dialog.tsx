@@ -129,7 +129,9 @@ export const SelectDialog = ({
           </div>
         </DialogHeader>
         <DialogFooter>
-          <Button onClick={async () => await analyzeData()}>Analyze</Button>
+          <Button disabled={isPending} onClick={async () => await analyzeData()}>
+            {isPending ? (<Loader2 className='animate-spin size-4'/>) : <span>Analyze</span>}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
