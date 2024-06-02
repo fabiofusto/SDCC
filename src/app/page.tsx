@@ -1,9 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { Chart } from '@/components/chart';
 import {MaxWidthWrapper} from '@/components/max-width-wrapper';
+import { db } from '@/lib/db';
 import { Check } from 'lucide-react';
 
-export default function Home() {
+export default async function Home() {
+  const users = await db.user.findMany({})
+  console.log(users)
   return (
     <div className="bg-slate-50 grainy-light">
       <section>
