@@ -10,23 +10,56 @@ import { NextResponse } from 'next/server';
 
 const { auth } = NextAuth(authConfig);
 
- // CORS headers
- const corsHeaders: {[key: string]: string} = {
-  'Access-Control-Allow-Origin': '*', // Permetti tutte le origini, modificalo secondo le tue necessità
-  'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-  'Access-Control-Allow-Headers': 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
-  'Access-Control-Allow-Credentials': 'true'
+const corsOptions: {
+  allowedMethods: string[];
+  allowedOrigins: string[];
+  allowedHeaders: string[];
+  exposedHeaders: string[];
+  maxAge?: number;
+  credentials: boolean;
+} = {
+  allowedMethods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS'.split(','),
+  allowedOrigins: 'https://cobrainsights'.split(','),
+  allowedHeaders:
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Authorization, Date, X-Api-Version'.split(
+      ','
+    ),
+  exposedHeaders: ''.split(','),
+  maxAge: 86400,
+  credentials: true,
 };
 
 export default auth((req) => {
-  // Gestione delle richieste OPTIONS (preflight request)
-  if (req.method === 'OPTIONS') {
-    const response = new NextResponse(null, { status: 204 });
-    Object.keys(corsHeaders).forEach((key) => {
-      response.headers.set(key, corsHeaders[key]);
-    });
-    return response;
+  const response = NextResponse.next();
+
+  const origin = req.headers.get('origin') ?? '';
+  if (
+    corsOptions.allowedOrigins.includes('*') ||
+    corsOptions.allowedOrigins.includes(origin)
+  ) {
+    response.headers.set('Access-Control-Allow-Origin', origin);
   }
+
+  response.headers.set(
+    'Access-Control-Allow-Credentials',
+    corsOptions.credentials.toString()
+  );
+  response.headers.set(
+    'Access-Control-Allow-Methods',
+    corsOptions.allowedMethods.join(',')
+  );
+  response.headers.set(
+    'Access-Control-Allow-Headers',
+    corsOptions.allowedHeaders.join(',')
+  );
+  response.headers.set(
+    'Access-Control-Expose-Headers',
+    corsOptions.exposedHeaders.join(',')
+  );
+  response.headers.set(
+    'Access-Control-Max-Age',
+    corsOptions.maxAge?.toString() ?? ''
+  );
 
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
@@ -38,46 +71,25 @@ export default auth((req) => {
   const isLoginRoute = nextUrl.pathname === authRoutes.Login;
   const isLogoutRoute = nextUrl.pathname === authRoutes.Logout;
 
- 
-  // Se è una rotta API di autenticazione, aggiungi gli header CORS e lascia passare
+  //console.log({isLoggedIn, isAuthRoute, isApiAuthRoute})
+
   if (isApiAuthRoute && !isLoginRoute && !isLogoutRoute) {
-    const response = NextResponse.next();
-    Object.keys(corsHeaders).forEach((key) => {
-      response.headers.set(key, corsHeaders[key]);
-    });
     return response;
   }
 
-  // Se è una rotta di autenticazione
   if (isAuthRoute) {
-    // Se l'utente è loggato e sta cercando di accedere alla pagina di login, reindirizza
     if (isLoggedIn && isLoginRoute) {
-      const response = NextResponse.redirect(new URL(defaultLoginRedirect, nextUrl));
-      Object.keys(corsHeaders).forEach((key) => {
-        response.headers.set(key, corsHeaders[key]);
+      return new Response(null, {
+        status: 303,
+        headers: {
+          Location: new URL(defaultLoginRedirect, nextUrl).toString(),
+        },
       });
-      return response;
     }
-    const response = NextResponse.next();
-    Object.keys(corsHeaders).forEach((key) => {
-      response.headers.set(key, corsHeaders[key]);
-    });
+
     return response;
   }
 
-  // Se l'utente non è loggato e la rotta non è pubblica, reindirizza alla pagina di login
-  if (!isLoggedIn && !isPublicRoute) {
-    const response = NextResponse.redirect(new URL(authRoutes.Login, nextUrl));
-    Object.keys(corsHeaders).forEach((key) => {
-      response.headers.set(key, corsHeaders[key]);
-    });
-    return response;
-  }
-
-  const response = NextResponse.next();
-  Object.keys(corsHeaders).forEach((key) => {
-    response.headers.set(key, corsHeaders[key]);
-  });
   return response;
 });
 
