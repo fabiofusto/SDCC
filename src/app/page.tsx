@@ -5,8 +5,14 @@ import { db } from '@/lib/db';
 import { Check } from 'lucide-react';
 
 export default async function Home() {
-  const users = await db.user.findMany({})
-  console.log(users)
+
+  try {
+    const users = await db.user.findMany({})
+  } catch (error) {
+    return (
+      <h1>Ciao il db non va</h1>
+    )
+  }
   return (
     <div className="bg-slate-50 grainy-light">
       <section>
