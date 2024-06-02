@@ -1,11 +1,10 @@
 import { MaxWidthWrapper } from '@/components/max-width-wrapper';
 import { auth } from '../../../auth';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { db } from '@/lib/db';
 
 import { ReportCard } from '@/components/report-card';
 import { ErrorBanner } from '@/components/error-not-found';
-import { authRoutes } from '../../../routes';
 
 export const dynamic = 'force-dynamic'
 
@@ -27,7 +26,7 @@ const fetchReports = async (userId: string) => {
 
 const ReportsPage = async () => {
   const session = await auth();
-  if (!session || !session.user) redirect(authRoutes.Login);
+  if (!session || !session.user) notFound();
 
   const reports = await fetchReports(session.user.id!);
 
