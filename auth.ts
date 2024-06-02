@@ -4,6 +4,7 @@ import { db } from '@/lib/db';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  debug: true,
   trustHost: true,
   events: {
     async linkAccount({ user }) {
