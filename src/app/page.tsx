@@ -9,8 +9,9 @@ export default async function Home() {
   try {
     const users = await db.user.findMany({})
   } catch (error) {
-    return (
-      <h1>Ciao il db non va</h1>
+    if (error instanceof Error)
+      return (
+      <p>{error.message}</p>
     )
   }
   return (
