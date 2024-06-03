@@ -41,6 +41,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       },
     },
   },
+  redirectProxyUrl: "https://cobrainsights.xyz/api/auth",
   adapter: PrismaAdapter(db),
   session: { strategy: 'jwt' },
   ...authConfig,
