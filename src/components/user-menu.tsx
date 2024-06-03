@@ -3,9 +3,7 @@
 import {
   BarChart2,
   LogIn,
-  LogOut,
-  Table,
-  User as UserIcon,
+  LogOut, User as UserIcon
 } from 'lucide-react';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { useState } from 'react';
@@ -19,9 +17,10 @@ import {
 } from './ui/dropdown-menu';
 import { type User } from 'next-auth';
 import Link from 'next/link';
-import { authRoutes, datasetsRoutes, reportsRoute } from '../../routes';
+import { authRoutes, reportsRoute } from '../../routes';
 import { Button, buttonVariants } from './ui/button';
 import { useRouter } from 'next/navigation';
+import { signIn, signOut } from 'next-auth/react';
 
 export const UserProfile = ({ user }: { user: User | undefined }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -69,7 +68,8 @@ export const UserProfile = ({ user }: { user: User | undefined }) => {
                   variant={null}
                   size="sm"
                   onClick={() => {
-                    router.push(authRoutes.Logout);
+                    //router.push(authRoutes.Logout);
+                    signOut()
                     setIsOpen(!isOpen);
                   }}
                 >
@@ -81,16 +81,15 @@ export const UserProfile = ({ user }: { user: User | undefined }) => {
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <Link
-          className={buttonVariants({
-            variant: 'outline',
-          })}
-          href={authRoutes.Login}
+        <Button
+          variant='outline'
+          //href={authRoutes.Login}
+          onClick={() => signIn()}
         >
           <div className="flex items-center">
             <span>Sign in</span> <LogIn className="ml-1.5 size-4" />
           </div>
-        </Link>
+        </Button>
       )}
     </>
   );
