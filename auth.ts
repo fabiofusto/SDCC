@@ -35,7 +35,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       });
     },
   },
-  debug: true,
+  debug: process.env.NODE_ENV === "development",
   logger: {
     error: console.error,
     warn: console.warn,
