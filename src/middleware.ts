@@ -21,7 +21,7 @@ const corsOptions: {
   allowedMethods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS'.split(','),
   allowedOrigins: 'https://cobrainsights.xyz'.split(','),
   allowedHeaders:
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Authorization, Date, X-Api-Version, Accept-Encoding:gzip'.split(
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Authorization, Date, X-Api-Version'.split(
       ','
     ),
   exposedHeaders: ''.split(','),
