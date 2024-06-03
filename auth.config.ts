@@ -10,7 +10,7 @@ export default {
       clientSecret: process.env.AUTH_COGNITO_SECRET,
       issuer: process.env.AUTH_COGNITO_ISSUER,
       authorization: { params: { scope: 'email openid profile' } },
-      //checks: ['pkce', 'nonce'],
+      checks: ['pkce', 'nonce'],
     }),
   ],
   secret: process.env.AUTH_SECRET,
