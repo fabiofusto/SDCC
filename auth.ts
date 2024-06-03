@@ -5,6 +5,12 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   debug: true,
+  logger: {
+    error: console.error,
+    warn: console.warn,
+    info: console.log,
+    debug: console.log,
+  },
   trustHost: true,
   events: {
     async linkAccount({ user }) {
