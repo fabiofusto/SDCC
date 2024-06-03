@@ -1,4 +1,5 @@
 import Cognito from '@auth/core/providers/cognito';
+import cognito from 'next-auth/providers/cognito';
 
 import type { NextAuthConfig } from 'next-auth';
 
