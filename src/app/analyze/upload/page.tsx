@@ -55,7 +55,12 @@ const UploadPage = () => {
           },
         })
         .catch((error) => {
-          throw new Error(error);
+          return toast({
+            title: 'Error in Axios request',
+            description: error.message,
+            variant: 'destructive',
+          
+          })
         })
         .then(() => {
           toast({

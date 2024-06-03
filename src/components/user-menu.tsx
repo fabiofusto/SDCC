@@ -16,9 +16,8 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { type User } from 'next-auth';
-import Link from 'next/link';
 import { authRoutes, reportsRoute } from '../../routes';
-import { Button, buttonVariants } from './ui/button';
+import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
 import { signIn, signOut } from 'next-auth/react';
 
@@ -68,8 +67,7 @@ export const UserProfile = ({ user }: { user: User | undefined }) => {
                   variant={null}
                   size="sm"
                   onClick={() => {
-                    //router.push(authRoutes.Logout);
-                    signOut()
+                    signOut({ callbackUrl: "/", redirect:true})
                     setIsOpen(!isOpen);
                   }}
                 >
@@ -84,7 +82,10 @@ export const UserProfile = ({ user }: { user: User | undefined }) => {
         <Button
           variant='outline'
           //href={authRoutes.Login}
-          onClick={() => signIn()}
+          onClick={() => {
+            signIn()
+            setIsOpen(!isOpen)
+          }}
         >
           <div className="flex items-center">
             <span>Sign in</span> <LogIn className="ml-1.5 size-4" />

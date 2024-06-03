@@ -7,7 +7,7 @@ import { authRoutes } from '../../../routes'
 
 const Layout = async ({ children }: { children: ReactNode }) => {
   const session = await auth()
-  if(!session) redirect(authRoutes.Login)
+  if(!session || !session.user) redirect(authRoutes.Login)
 
   return (
     <MaxWidthWrapper className='flex-1 flex flex-col'>

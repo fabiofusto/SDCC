@@ -11,7 +11,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       name: "authjs.pkce.code_verifier",
       options: {
         httpOnly: true,
-        sameSite: "lax",
+        sameSite: "none",
         path: "/",
         secure: true,
       },

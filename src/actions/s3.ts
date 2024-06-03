@@ -37,7 +37,7 @@ export async function getDatasetSignedURL(
   if (size > maxFileSize) return { error: 'File size too large' };
   
   const putObjectCommand = new PutObjectCommand({
-    Bucket: process.env.AWS_S3_BUCKET_NAME!,
+    Bucket: process.env.S3_BUCKET_NAME,
     Key: generateFileName(),
     ContentType: type,
     ContentLength: size,
@@ -82,7 +82,7 @@ export async function getReportSignedURL(
   if (size > maxFileSize) return { error: 'File size too large' };
 
   const putObjectCommand = new PutObjectCommand({
-    Bucket: process.env.AWS_S3_BUCKET_NAME!,
+    Bucket: process.env.S3_BUCKET_NAME!,
     Key: generateFileName(),
     ContentType: type,
     ContentLength: size,
@@ -134,7 +134,7 @@ export async function getDatasetFromS3(datasetId: string)  {
   if(dataset.userId !== userId) return { error: 'Unauthorized' };
 
   const getObjectCommand = new GetObjectCommand({
-    Bucket: process.env.AWS_S3_BUCKET_NAME!,
+    Bucket: process.env.S3_BUCKET_NAME!,
     Key: dataset.url.split('/').pop(),
   });
 
@@ -162,7 +162,7 @@ export async function getReportFromS3(reportId: string)  {
   if(!report.url) return { error: 'Report not found' };
 
   const getObjectCommand = new GetObjectCommand({
-    Bucket: process.env.AWS_S3_BUCKET_NAME!,
+    Bucket: process.env.S3_BUCKET_NAME!,
     Key: report.url.split('/').pop(),
   });
 
