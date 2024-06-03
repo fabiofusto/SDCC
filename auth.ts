@@ -13,10 +13,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         httpOnly: true,
         sameSite: "none",
         path: "/",
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
       },
     },
   },
+  basePath: '/api/auth',
   callbacks: {
     async jwt({ token }) {
       return token;
