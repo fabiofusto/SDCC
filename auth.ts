@@ -17,7 +17,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       },
     },
   },
-  basePath: '/api/auth',
   callbacks: {
     async jwt({ token }) {
       return token;
