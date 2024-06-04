@@ -15,17 +15,14 @@ const Steps = [
   {
     title: 'Upload your data',
     description: 'Upload your CSV file to our platform and let us do the rest',
-    icon: <Table className="md:hidden size-6" />,
   },
   {
     title: 'Choose a column',
     description: 'Select the specific column that you want to analyze',
-    icon: <Columns className="md:hidden size-6" />,
   },
   {
     title: 'View the final results',
     description: 'Visualize and donwload the sentiment analysis results',
-    icon: <BarChart className="md:hidden size-6" />,
   },
 ];
 
