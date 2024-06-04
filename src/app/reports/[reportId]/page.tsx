@@ -23,7 +23,7 @@ const ReportPage = async ({ params }: {params: ReportPageProps}) => {
     <MaxWidthWrapper>
       <Report
         report={report}
-        actions={!report.url}
+        confetti={true}
       />
     </MaxWidthWrapper>
   );

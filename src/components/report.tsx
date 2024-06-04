@@ -4,117 +4,22 @@ import { Report as ReportType } from '@prisma/client';
 import { useEffect, useState } from 'react';
 import Confetti from 'react-dom-confetti';
 import { MaxWidthWrapper } from './max-width-wrapper';
-import { File, Loader2 } from 'lucide-react';
 import { Chart } from './chart';
 
-import { Button } from './ui/button';
-import { computeSHA256, exportComponentAsPDF } from '@/lib/utils';
-import { getReportSignedURL } from '@/actions/s3';
-import axios from 'axios';
-import { useToast } from './ui/use-toast';
 import { DownloadReportButton } from './download-report-button';
 import { PercentageCards } from './percentage-cards';
 import { sentimentDisplay } from '@/constants';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 interface ReportProps {
   report: ReportType;
   confetti?: boolean;
-  actions?: boolean;
-  urlPresent?: boolean;
 }
 
-export const Report = ({
-  report,
-  confetti = false,
-  actions = true,
-  urlPresent,
-}: ReportProps) => {
+export const Report = ({ report, confetti = false }: ReportProps) => {
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
-  const [canDownload, setCanDownload] = useState<boolean>(
-    urlPresent ? true : false
-  );
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [file, setFile] = useState<File | null>(null);
-  const { toast } = useToast();
-
-  const uploadReportToS3 = async () => {
-    setIsLoading(true);
-
-    if (!file) {
-      return toast({
-        title: 'Error while generating report',
-        description: 'Please try again',
-        variant: 'destructive',
-      });
-    }
-
-    const checksum = await computeSHA256(file);
-    const signedURL = await getReportSignedURL(
-      report.id,
-      file.type,
-      file.size,
-      checksum
-    );
-    if (signedURL.error !== undefined) {
-      if (signedURL.error === 'Report already exists') {
-        setCanDownload(true);
-        return toast({
-          title: 'Report already exists',
-          description: 'You can download it now',
-          variant: 'default',
-        });
-      }
-
-      return toast({
-        title: 'Error while creating report',
-        description: 'Please try again',
-        variant: 'destructive',
-      });
-    }
-
-    const { url } = signedURL.success;
-
-    await axios
-      .put(url, file, {
-        headers: {
-          'Content-Type': file.type,
-        },
-      })
-      .catch((error) => {
-        return toast({
-          title: 'Error while uploading report',
-          description: 'Please try again',
-          variant: 'destructive',
-        });
-      })
-      .then(() => {
-        setIsLoading(false);
-        setCanDownload(true);
-        return toast({
-          title: 'Report created successfully',
-          description: 'You can download it now',
-          variant: 'default',
-        });
-      });
-  };
 
   useEffect(() => {
-    const generatePDF = async () => {
-      try {
-        const pdfFile = await exportComponentAsPDF();
-        setFile(pdfFile);
-      } catch (error) {
-        return toast({
-          title: 'Error while generating report',
-          description: 'Please reload your page',
-          variant: 'destructive',
-        });
-      }
-    };
     setShowConfetti(true);
-    generatePDF();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const sentimentScore: { [key: string]: number } = {
@@ -137,7 +42,6 @@ export const Report = ({
       <MaxWidthWrapper className="my-4">
         <div
           id="report"
-          className="px-8"
         >
           <div className="w-full flex flex-col gap-y-2 items-center justify-center">
             <h1 className="font-bold text-2xl lg:text-3xl">
@@ -174,39 +78,19 @@ export const Report = ({
                 <PercentageCards sentimentScore={sentimentScore} />
               </div>
               <div className="mt-4 w-full h-[350px]">
-                <Chart  score={sentimentScore} />
+                <Chart score={sentimentScore} />
               </div>
             </div>
           </div>
         </div>
-        {actions && (
-          <div className="py-4 flex items-center justify-center gap-2 w-full">
-            {!urlPresent && !canDownload && (
-              <Button
-                disabled={isLoading || canDownload}
-                onClick={async () => await uploadReportToS3()}
-                variant="outline"
-              >
-                {canDownload ? (
-                  <span className="flex items-center gap-1.5">
-                    Generate PDF <File className="size-5" />
-                  </span>
-                ) : isLoading ? (
-                  <Loader2 className="animate-spin text-muted-foreground size-5" />
-                ) : (
-                  <span className="flex items-center gap-1.5">
-                    Generate PDF <File className="size-4" />
-                  </span>
-                )}
-              </Button>
-            )}
-            <DownloadReportButton
-              reportId={report.id}
-              canDownload={canDownload}
-              iconSize={false}
-            />
-          </div>
-        )}
+
+        <div className="py-4 flex items-center justify-center gap-2 w-full">
+          <DownloadReportButton
+            reportId={report.id}
+            reportUrl={report.url}
+            iconSize={false}
+          />
+        </div>
       </MaxWidthWrapper>
     </>
   );

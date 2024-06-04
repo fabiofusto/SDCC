@@ -103,7 +103,6 @@ export async function getReportSignedURL(
   })
 
   if(!report) return { error: 'Report does not exists' }
-  if(report.url) return { error: 'Report already exists' }
   if(report.userId !== userId) return {error: 'Unauthorized'}
 
   await db.report.update({

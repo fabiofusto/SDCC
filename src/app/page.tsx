@@ -94,7 +94,7 @@ export default async function Home() {
               <div className="relative pointer-events-none z-50 overflow-hidden w-[400px] h-[300px] lg:h-[400px]">
                 <Chart
                   score={{
-                    Positive: 0.5,
+                    Positive: 0.4,
                     Negative: 0.3,
                     Mixed: 0.2,
                     Neutral: 0.1,

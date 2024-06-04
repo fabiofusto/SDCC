@@ -38,7 +38,7 @@ export const ReportCard = ({ report }: ReportCardProps) => {
       <CardContent className="flex items-center justify-end gap-2">
         {report.url && <DownloadReportButton
           reportId={report.id}
-          canDownload
+          reportUrl={report.url}
         />}
         <DownloadDatasetButton
           datasetId={report.datasetId}
