@@ -5,24 +5,26 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { BarChart, Check, Columns, Table } from 'lucide-react';
+import { Check, Columns, PieChart, Table } from 'lucide-react';
 
-const Steps = [
+const steps = [
   {
     title: 'Upload your data',
     description: 'Upload your CSV file to our platform and let us do the rest',
+    icon: <Table />,
   },
   {
     title: 'Choose a column',
     description: 'Select the specific column that you want to analyze',
+    icon: <Columns />,
   },
   {
     title: 'View the final results',
-    description: 'Visualize and donwload the sentiment analysis results',
+    description: 'Visualize and download the sentiment analysis results',
+    icon: <PieChart />,
   },
 ];
 
@@ -89,12 +91,7 @@ export default async function Home() {
           </div>
           <div className="col-span-full lg:col-span-1 w-full flex justify-center px-8 sm:px-16 md:px-0  lg:mx-0 mt-20 h-fit">
             <div className="relative md:max-w-xl">
-              <img
-                src="/line.png"
-                className="absolute w-20 -bottom-3 select-none"
-                alt="line"
-              />
-              <div className="relative pointer-events-none z-50 overflow-hidden">
+              <div className="relative pointer-events-none z-50 overflow-hidden w-[400px] h-[300px] lg:h-[400px]">
                 <Chart
                   score={{
                     Positive: 0.5,
@@ -102,9 +99,6 @@ export default async function Home() {
                     Mixed: 0.2,
                     Neutral: 0.1,
                   }}
-                  type='bar'
-                  width={375}
-                  height={300}
                 />
               </div>
             </div>
@@ -114,19 +108,20 @@ export default async function Home() {
 
       <section className="mb-8">
         <MaxWidthWrapper>
-          <div className="grid grid-cols1 md:grid-cols-3 gap-8">
-            {Steps.map((step, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {steps.map((step, index) => (
               <Card
                 key={index}
-                className="shadow-md"
+                className="shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out bg-gradient-to-br from-gray-100 via-gray-100/5 to-white text-gray-800"
               >
-                <CardHeader>
-                  <CardTitle className="text-md md:text-xl lg:text-2xl text-center">
+                <CardHeader className="flex flex-col items-center">
+                  <span>{step.icon}</span>
+                  <CardTitle className="text-md md:text-xl text-center font-bold">
                     {step.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-center text-sm md:text-lg">
+                  <CardDescription className="text-center text-sm md:text-md">
                     {step.description}
                   </CardDescription>
                 </CardContent>

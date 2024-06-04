@@ -1,11 +1,6 @@
 'use client';
 
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
   Cell,
@@ -18,12 +13,9 @@ interface ChartProps {
   score: {
     [key: string]: number;
   };
-  type: 'pie' | 'bar';
-  height?: number;
-  width?: number;
 }
 
-export const Chart = ({ score, type, height=350, width=350 }: ChartProps) => {
+export const Chart = ({ score }: ChartProps) => {
   const data = Object.entries(score).map(([key, score]) => ({
     name: key,
     score: score * 100,
@@ -37,49 +29,26 @@ export const Chart = ({ score, type, height=350, width=350 }: ChartProps) => {
   ];
 
   return (
-    <div className={`w-[${width}px] h-[${height}px]`}>
     <ResponsiveContainer
       width="100%"
       height="100%"
     >
-      {type === 'bar' ? (
-        <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey={'name'} />
-          <YAxis
-            scale={'linear'}
-            domain={[0, 100]}
-          />
-          <Tooltip />
-          <Bar dataKey="score">
-            {data.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={colors[index % colors.length]}
-              />
-            ))}
-          </Bar>
-        </BarChart>
-      ) : (
-        <PieChart>
-          <Tooltip />
-          <Legend align='center'/>
-          <Pie
-            data={data}
-            dataKey={'score'}
-            nameKey={'name'}
-            labelLine={false}
-          >
-            {data.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={colors[index % colors.length]}
-              />
-            ))}
-          </Pie>
-        </PieChart>
-      )}
+      <PieChart>
+        <Tooltip />
+        <Legend align="center" />
+        <Pie
+          data={data}
+          dataKey={'score'}
+          nameKey={'name'}
+        >
+          {data.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={colors[index % colors.length]}
+            />
+          ))}
+        </Pie>
+      </PieChart>
     </ResponsiveContainer>
-    </div>
   );
 };

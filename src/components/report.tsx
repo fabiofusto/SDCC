@@ -155,7 +155,7 @@ export const Report = ({
                 </p>
                 <div className="flex items-center gap-x-1.5 mt-2">
                   <span
-                    className={`text-lg xl:text-2xl ${
+                    className={`text-lg xl:text-2xl my-4 ${
                       sentimentDisplay[report.sentiment].color
                     }`}
                   >
@@ -170,21 +170,12 @@ export const Report = ({
                   </span>
                 </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
                 <PercentageCards sentimentScore={sentimentScore} />
               </div>
-            <div className='flex flex-col md:flex-row justify-between gap-6 items-center mt-4'>
-              <Chart 
-                score={sentimentScore}
-                type='pie'
-                height={300}
-              />
-              <Chart 
-                score={sentimentScore}
-                type='bar'
-                height={300}
-              />
-            </div>
+              <div className="mt-4 w-full h-[350px]">
+                <Chart  score={sentimentScore} />
+              </div>
             </div>
           </div>
         </div>

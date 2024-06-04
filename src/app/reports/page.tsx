@@ -13,9 +13,6 @@ const fetchReports = async (userId: string) => {
   const reports = await db.report.findMany({
     where: {
       userId,
-      url: {
-        not: null,
-      },
     },
     orderBy: {
       createdAt: 'desc'
