@@ -90,7 +90,7 @@ export default async function Home() {
               </ul>
             </div>
           </div>
-          <div className="col-span-full lg:col-span-1 w-full flex justify-center px-8 sm:px-16 md:px-0 mt-32 lg:mx-0 lg:mt-20 h-fit">
+          <div className="col-span-full lg:col-span-1 w-full flex justify-center px-8 sm:px-16 md:px-0  lg:mx-0 mt-20 h-fit">
             <div className="relative md:max-w-xl">
               <img
                 src="/line.png"
@@ -102,8 +102,8 @@ export default async function Home() {
                   score={{
                     Positive: 0.5,
                     Negative: 0.3,
-                    Mixed: 0.1,
-                    Neutral: 0.2,
+                    Mixed: 0.2,
+                    Neutral: 0.1,
                   }}
                 />
               </div>
@@ -114,22 +114,19 @@ export default async function Home() {
 
       <section className="mb-8">
         <MaxWidthWrapper>
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols1 md:grid-cols-3 gap-8">
             {Steps.map((step, index) => (
               <Card
                 key={index}
                 className="shadow-md"
               >
-                <CardHeader className="w-full flex-col md:flex-row items-center justify-center">
+                <CardHeader>
                   <CardTitle className="text-md md:text-xl lg:text-2xl text-center">
                     {step.title}
                   </CardTitle>
-                  <span>
-                    {step.icon}
-                  </span>
                 </CardHeader>
-                <CardContent className="hidden md:block">
-                  <CardDescription className="text-center text-sm md:text-md lg:text-lg">
+                <CardContent>
+                  <CardDescription className="text-center text-sm md:text-lg">
                     {step.description}
                   </CardDescription>
                 </CardContent>
