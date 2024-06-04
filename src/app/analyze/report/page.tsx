@@ -22,7 +22,6 @@ const ReportPage = async ({ searchParams }: ReportPageProps) => {
   });
 
   if (!report) return notFound();
-  const urlPresent = report.url !== null;
 
   return <Report report={report} confetti />;
 };
