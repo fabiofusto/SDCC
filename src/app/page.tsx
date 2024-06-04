@@ -94,7 +94,7 @@ export default async function Home() {
                 className="absolute w-20 -bottom-3 select-none"
                 alt="line"
               />
-              <div className="relative pointer-events-none z-50 overflow-hidden w-[375px] h-[250px] xl:h-[300px]">
+              <div className="relative pointer-events-none z-50 overflow-hidden">
                 <Chart
                   score={{
                     Positive: 0.5,
@@ -102,6 +102,9 @@ export default async function Home() {
                     Mixed: 0.2,
                     Neutral: 0.1,
                   }}
+                  type='bar'
+                  width={375}
+                  height={300}
                 />
               </div>
             </div>

@@ -23,7 +23,7 @@ export const PercentageCards = ({sentimentScore}: PercentageCardsProps) => {
         return (
           <Card className="border-none drop-shadow-md" key={key}>
             <CardHeader className="flex items-center justify-between">
-              <CardTitle className="text-md lg:text-lg line-clamp-1">{key}</CardTitle>
+              <CardTitle className="text-lg lg:text-xl line-clamp-1">{key}</CardTitle>
               <CardDescription>{icon}</CardDescription>
             </CardHeader>
             <CardContent className="flex items-center justify-center">

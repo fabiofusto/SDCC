@@ -15,6 +15,7 @@ import { useToast } from './ui/use-toast';
 import { DownloadReportButton } from './download-report-button';
 import { PercentageCards } from './percentage-cards';
 import { sentimentDisplay } from '@/constants';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 interface ReportProps {
   report: ReportType;
@@ -142,18 +143,12 @@ export const Report = ({
             <h1 className="font-bold text-2xl lg:text-3xl">
               Cobra<span className="text-green-600">Insights</span>
             </h1>
-            <p className="text-muted-foreground text-md lg:text-lg">
-              Check out your sentiment analysis results!
-            </p>
           </div>
 
-          <div className="flex flex-col xl:flex-row justify-between items-center mt-8 xl:space-x-8">
+          <div className="flex flex-col justify-between items-center xl:space-x-8">
             <div className="flex flex-col justify-between items-center">
               <div className="flex flex-col items-center justify-center">
-                <h2 className="font-bold text-xl lg:text-2xl">
-                  Result of sentiment analysis
-                </h2>
-                <p className="text-muted-foreground mt-2 text-sm lg:text-lg text-center">
+                <p className="text-muted-foreground mt-2 text-md lg:text-lg text-center">
                   We analyzed the sentiment of{' '}
                   <span className="font-bold">{report.totalTexts}</span> texts
                   and the average result is
@@ -175,14 +170,21 @@ export const Report = ({
                   </span>
                 </div>
               </div>
-              <div className="grid grid-cols-4 gap-4 mt-8">
-                <PercentageCards
-                  sentimentScore={sentimentScore}
-                />
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-8">
+                <PercentageCards sentimentScore={sentimentScore} />
               </div>
+            <div className='flex flex-col md:flex-row justify-between gap-6 items-center mt-4'>
+              <Chart 
+                score={sentimentScore}
+                type='pie'
+                height={300}
+              />
+              <Chart 
+                score={sentimentScore}
+                type='bar'
+                height={300}
+              />
             </div>
-            <div className="w-[375px] h-[250px] xl:w-[450px] lg:h-[400px] mt-8 xl:mt-0">
-              <Chart score={sentimentScore} />
             </div>
           </div>
         </div>

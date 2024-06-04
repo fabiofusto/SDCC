@@ -51,7 +51,7 @@ export const exportComponentAsPDF = async (): Promise<File> => {
       type: 'application/pdf',
     });
 
-    pdf.save("report.pdf")
+    //pdf.save("report.pdf")
     return pdfFile;
   } catch (error) {
     throw new Error('Error exporting component as PDF');
