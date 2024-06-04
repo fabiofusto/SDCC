@@ -56,17 +56,18 @@ const UploadPage = () => {
         })
         .catch((error) => {
           return toast({
-            title: 'Error in Axios request',
-            description: error.message,
+            title: 'Error while uploading file',
+            description: 'Please try again',
             variant: 'destructive',
           
           })
         })
         .then(() => {
           toast({
-            title: 'Upload Successful!',
+            title: 'Upload successful!',
             description: 'File has been uploaded successfully',
             variant: 'default',
+            duration: 2000
           });
         });
 

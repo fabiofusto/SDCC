@@ -1,3 +1,4 @@
+import { sentimentDisplay } from '@/constants';
 import {
   Card,
   CardContent,
@@ -7,15 +8,12 @@ import {
 } from './ui/card';
 
 interface PercentageCardsProps {
-    sentimentDisplay : {
-      [key: string] : {icon: JSX.Element, color:string}
-    }
     sentimentScore: {
       [key: string]: number;
     }
 }
 
-export const PercentageCards = ({sentimentDisplay, sentimentScore}: PercentageCardsProps) => {
+export const PercentageCards = ({sentimentScore}: PercentageCardsProps) => {
   const totalScore = Object.values(sentimentScore).reduce((a, b) => a + b, 0);
   
   return (

@@ -1,23 +1,39 @@
 /* eslint-disable @next/next/no-img-element */
 import { Chart } from '@/components/chart';
-import {MaxWidthWrapper} from '@/components/max-width-wrapper';
-import { db } from '@/lib/db';
-import { Check } from 'lucide-react';
+import { MaxWidthWrapper } from '@/components/max-width-wrapper';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { BarChart, Check, Columns, Table } from 'lucide-react';
+
+const Steps = [
+  {
+    title: 'Upload your data',
+    description: 'Upload your CSV file to our platform and let us do the rest',
+    icon: <Table className="md:hidden size-6" />,
+  },
+  {
+    title: 'Choose a column',
+    description: 'Select the specific column that you want to analyze',
+    icon: <Columns className="md:hidden size-6" />,
+  },
+  {
+    title: 'View the final results',
+    description: 'Visualize and donwload the sentiment analysis results',
+    icon: <BarChart className="md:hidden size-6" />,
+  },
+];
 
 export default async function Home() {
-
-  try {
-    const users = await db.user.findMany({})
-  } catch (error) {
-    if (error instanceof Error)
-      return (
-      <p>{error.message}</p>
-    )
-  }
   return (
     <div className="bg-slate-50 grainy-light">
       <section>
-        <MaxWidthWrapper className="pb-24 pt-10 lg:grid lg:grid-cols-3 sm:pb-32 lg:gap-x-0 xl:gap-x-8 lg:pt-24 xl:pt-30 lg:pb-30">
+        <MaxWidthWrapper className="pt-10 lg:grid lg:grid-cols-3 pb-16 lg:gap-x-0 xl:gap-x-8 lg:pt-24 xl:pt-30 lg:pb-30">
           <div className="col-span-2 px-6 lg:px-0 lg:pt-4">
             <div className="relative mx-auto text-center lg:text-left flex flex-col items-center lg:items-start">
               <div className="absolute w-28 left-0 -top-20 hidden lg:block">
@@ -30,12 +46,12 @@ export default async function Home() {
               </div>
               <h1 className="relative w-fit tracking-tight text-balance mt-16 font-bold !leading-tight text-gray-900 text-4xl md:text-5xl lg:text-6xl">
                 Unlock the{' '}
-                <span className="bg-green-600 px-2 text-white">Sentiment </span>
+                <span className="bg-green-600 px-2 text-white">Sentiment</span>{' '}
                 in your data
               </h1>
               <p className="mt-8 text-lg lg:pr-10 max-w-prose text-center lg:text-left text-balance md:text-wrap">
-                Easily analyze the sentiment of your tabular datasets
-                with our powerful platform.{' '}
+                Easily analyze the sentiment of your tabular datasets with our
+                powerful platform.{' '}
                 <span className="font-semibold">
                   Cobra<span className="text-green-600">Insights</span>
                 </span>{' '}
@@ -82,15 +98,43 @@ export default async function Home() {
                 alt="line"
               />
               <div className="relative pointer-events-none z-50 overflow-hidden w-[375px] h-[250px] xl:h-[300px]">
-                <Chart 
-                score={{
-                  "Positive": 0.5,
-                  "Negative": 0.3,
-                  "Mixed": 0.1,
-                  "Neutral": 0.2
-                }}/>
+                <Chart
+                  score={{
+                    Positive: 0.5,
+                    Negative: 0.3,
+                    Mixed: 0.1,
+                    Neutral: 0.2,
+                  }}
+                />
               </div>
             </div>
+          </div>
+        </MaxWidthWrapper>
+      </section>
+
+      <section className="mb-8">
+        <MaxWidthWrapper>
+          <div className="grid grid-cols-3 gap-8">
+            {Steps.map((step, index) => (
+              <Card
+                key={index}
+                className="shadow-md"
+              >
+                <CardHeader className="w-full flex-col md:flex-row items-center justify-center">
+                  <CardTitle className="text-md md:text-xl lg:text-2xl text-center">
+                    {step.title}
+                  </CardTitle>
+                  <span>
+                    {step.icon}
+                  </span>
+                </CardHeader>
+                <CardContent className="hidden md:block">
+                  <CardDescription className="text-center text-sm md:text-md lg:text-lg">
+                    {step.description}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </MaxWidthWrapper>
       </section>

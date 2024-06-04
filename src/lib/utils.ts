@@ -25,12 +25,12 @@ export const parseData = (data: string) => {
 };
 
 export const exportComponentAsPDF = async (): Promise<File> => {
-  const input = document.getElementById('report');
-  if (!input) {
-    console.error('Could not find element with id "report"');
-    throw new Error('Could not find element with id "report"');
-  }
   try {
+    const input = document.getElementById('report');
+    if (!input) {
+      throw new Error();
+    }
+
     const dataUrl = await domtoimage.toPng(input);
     const img = new Image();
     img.src = dataUrl;

@@ -82,8 +82,8 @@ export const Report = ({
       })
       .catch((error) => {
         return toast({
-          title: 'Error while creating report',
-          description: 'Please reload your page',
+          title: 'Error while uploading report',
+          description: 'Please try again',
           variant: 'destructive',
         });
       })
@@ -104,10 +104,9 @@ export const Report = ({
         const pdfFile = await exportComponentAsPDF();
         setFile(pdfFile);
       } catch (error) {
-        console.error('Error exporting component as PDF:', error);
         return toast({
-          title: 'Error exporting component as PDF',
-          description: 'Please try again',
+          title: 'Error while generating report',
+          description: 'Please reload your page',
           variant: 'destructive',
         });
       }
@@ -178,7 +177,6 @@ export const Report = ({
               </div>
               <div className="grid grid-cols-4 gap-4 mt-8">
                 <PercentageCards
-                  sentimentDisplay={sentimentDisplay}
                   sentimentScore={sentimentScore}
                 />
               </div>
