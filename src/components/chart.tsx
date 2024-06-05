@@ -1,5 +1,6 @@
 'use client';
 
+import { AnalysisResult } from '@prisma/client';
 import {
   Tooltip,
   ResponsiveContainer,
@@ -16,17 +17,19 @@ interface ChartProps {
 }
 
 export const Chart = ({ score }: ChartProps) => {
-  const data = Object.entries(score).map(([key, score]) => ({
-    name: key,
-    score: score * 100,
-  }));
+  const data = Object.entries(score)
+    .filter(([key, score]) => score !== 0)
+    .map(([key, score]) => ({
+      name: key,
+      score: (score * 100),
+    }));
 
-  const colors = [
-    'rgb(22 163 74)',
-    'rgb(239 68 68)',
-    'rgb(234 179 8)',
-    'rgb(59 130 246)',
-  ];
+  const colors: {[key: string]: string} = {
+    Positive: 'rgb(22 163 74)',
+    Negative: 'rgb(239 68 68)',
+    Mixed: 'rgb(234 179 8)',
+    Neutral: 'rgb(59 130 246)',
+  };
 
   return (
     <ResponsiveContainer
@@ -44,7 +47,7 @@ export const Chart = ({ score }: ChartProps) => {
           {data.map((entry, index) => (
             <Cell
               key={`cell-${index}`}
-              fill={colors[index % colors.length]}
+              fill={colors[entry.name]}
             />
           ))}
         </Pie>

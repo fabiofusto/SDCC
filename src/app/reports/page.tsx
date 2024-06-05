@@ -1,32 +1,19 @@
 import { MaxWidthWrapper } from '@/components/max-width-wrapper';
 import { auth } from '../../../auth';
 import { redirect } from 'next/navigation';
-import { db } from '@/lib/db';
 
 import { ReportCard } from '@/components/report-card';
 import { ErrorBanner } from '@/components/error-not-found';
 import { authRoutes } from '../../../routes';
+import { getUserReportsAndSentiment } from '@/actions/db';
 
 export const dynamic = 'force-dynamic'
-
-const fetchReports = async (userId: string) => {
-  const reports = await db.report.findMany({
-    where: {
-      userId,
-    },
-    orderBy: {
-      createdAt: 'desc'
-    }
-  });
-  return reports;
-};
-
 
 const ReportsPage = async () => {
   const session = await auth();
   if (!session || !session.user) redirect(authRoutes.Login);
 
-  const reports = await fetchReports(session.user.id!);
+  const reports = await getUserReportsAndSentiment(session.user.id!);
 
   if (reports.length < 1) return <ErrorBanner title='reports'/>;
 

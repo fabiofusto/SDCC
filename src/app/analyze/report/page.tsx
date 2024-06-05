@@ -15,15 +15,21 @@ const ReportPage = async ({ searchParams }: ReportPageProps) => {
     return notFound();
   }
 
+  const analysisResults = await db.analysisResult.findMany({
+    where: {
+      reportId: id,
+    },
+  });
+  if (analysisResults.length < 1) return notFound();
+
   const report = await db.report.findUnique({
     where: {
       id,
     },
   });
+  if(!report) return notFound()
 
-  if (!report) return notFound();
-
-  return <Report report={report} confetti />;
+  return <Report report={report} results={analysisResults} confetti />;
 };
 
 export default ReportPage;

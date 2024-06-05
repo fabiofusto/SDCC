@@ -20,9 +20,10 @@ interface DatasetProps {
   }[];
   body: string[][];
   datasetId: string
+  userId: string
 }
 
-export const Dataset = ({ headers, body, datasetId }: DatasetProps) => {
+export const Dataset = ({ headers, body, datasetId, userId }: DatasetProps) => {
   //TODO: Add loading state with skeleton
 
   return (
@@ -56,6 +57,7 @@ export const Dataset = ({ headers, body, datasetId }: DatasetProps) => {
         columns={headers}
         body={body}
         datasetId={datasetId}
+        userId={userId}
       />
     </MaxWidthWrapper>
   );

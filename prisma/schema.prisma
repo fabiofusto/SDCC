@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
@@ -58,22 +58,33 @@ model Dataset {
   user User @relation(fields: [userId], references: [id])
 }
 
-model Report {
-  id               String   @id @default(cuid())
-  url              String?
+enum AnalysisService {
+  AWS
+  AZURE
+}
+
+model AnalysisResult {
+  id               String          @id @default(cuid())
+  service          AnalysisService
   sentiment        String
-  mixedAvgScore    Float
-  mixedTexts       Int
-  positiveAvgScore Float
-  positiveTexts    Int
-  negativeAvgScore Float
-  negativeTexts    Int
-  neutralAvgScore  Float
-  neutralTexts     Int
   totalTexts       Int
-  datasetId        String   @unique
-  userId           String
-  createdAt        DateTime @default(now())
+  PositiveAvgScore Float
+  NegativeAvgScore Float
+  NeutralAvgScore  Float
+  MixedAvgScore    Float
+  reportId String
+
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  @@unique([service, reportId])
+}
+
+model Report {
+  id             String           @id @default(cuid())
+  url            String?
+  datasetId      String           @unique
+  userId         String
+  createdAt      DateTime         @default(now())
+  analysisResults AnalysisResult[]
 
   dataset Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)

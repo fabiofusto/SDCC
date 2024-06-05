@@ -1,3 +1,4 @@
+import { getReportWithResults } from '@/actions/db';
 import { MaxWidthWrapper } from '@/components/max-width-wrapper';
 import { Report } from '@/components/report';
 import { db } from '@/lib/db';
@@ -11,11 +12,7 @@ const ReportPage = async ({ params }: {params: ReportPageProps}) => {
   const {reportId} = params;
   if (!reportId) return notFound();
 
-  const report = await db.report.findUnique({
-    where: {
-      id: reportId,
-    },
-  });
+  const report = await getReportWithResults(reportId)
 
   if (!report) return notFound();
 
@@ -23,6 +20,7 @@ const ReportPage = async ({ params }: {params: ReportPageProps}) => {
     <MaxWidthWrapper>
       <Report
         report={report}
+        results={report.analysisResults}
         confetti={true}
       />
     </MaxWidthWrapper>

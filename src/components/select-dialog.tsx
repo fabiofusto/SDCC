@@ -1,6 +1,8 @@
 'use client';
 
-import { analyzeColumnSentiment } from '@/actions/comprehend';
+import {
+  analyseComprehendColumnSentiment,
+} from '@/actions/comprehend';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -24,6 +26,12 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from './ui/use-toast';
 import { Loader2 } from 'lucide-react';
+import {
+  analyseAzureColumnSentiment,
+} from '@/actions/azure';
+import { db } from '@/lib/db';
+import { createReport, updateReport } from '@/actions/db';
+import { Report } from '@prisma/client';
 
 interface SelectDialogProps {
   columns: {
@@ -32,15 +40,19 @@ interface SelectDialogProps {
   }[];
   body: string[][];
   datasetId: string;
+  userId: string;
 }
 
 export const SelectDialog = ({
   columns,
   body,
   datasetId,
+  userId,
 }: SelectDialogProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [selectedColumn, setSelectedColumn] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [reportId, setReportId] = useState<string | null>(null)
   const router = useRouter();
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
@@ -48,29 +60,85 @@ export const SelectDialog = ({
   const selectedColumnData = body.map((row: string[]) => row[selectedColumn]);
 
   async function analyzeData() {
-    const response = await analyzeColumnSentiment(
-      selectedColumnData,
-      datasetId
-    );
-    if (response.error !== undefined) {
+    setIsLoading(true)
+    setReportId(null)
+    
+    try {
+     const reportId = await createReport(datasetId, userId)
+
+      if (!reportId) throw new Error('Error while creating report');
+
+      const azureResponse = await analyseAzureColumnSentiment(
+        selectedColumnData,
+        reportId
+      );
+      const awsResponse = await analyseComprehendColumnSentiment(
+        selectedColumnData,
+        reportId
+      );
+
+      if (azureResponse.error !== undefined)
+        throw new Error('Error while analysing with Azure');
+      if (awsResponse.error !== undefined)
+        throw new Error('Error while analysing with AWS');
+
+      const azureResult = azureResponse.success.analysisResult;
+      const awsResult = awsResponse.success.analysisResult;
+
+      const updatedReport = await updateReport(reportId, datasetId, [awsResult, azureResult])
+      if (!updatedReport) throw new Error('Error while updating report');
+  
       toast({
-        title: 'Could not analyze data',
-        description: 'Please try again',
-        variant: 'destructive',
+        title: 'Data successfully analyzed!',
+        description: 'You will be redirected to the report page',
+        variant: 'default',
       });
-      return;
+
+      startTransition(() => {
+        router.push(`/analyze/report?id=${updatedReport.id}`);
+      });
+
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === 'Error while creating report')
+          return toast({
+            title: 'Error while creating the final report',
+            description: 'Please try again',
+            variant: 'destructive',
+          });
+        if (error.message === 'Error while analysing with Azure') {
+          return toast({
+            title: 'Azure failed to analyse your data',
+            description: 'Please try again',
+            variant: 'destructive',
+          });
+        }
+        if (error.message === 'Error while analysing with AWS') {
+          return toast({
+            title: 'AWS failed to analyse your data',
+            description: 'Please try again',
+            variant: 'destructive',
+          });
+        }
+        if (error.message === 'Error while updating report') {
+          return toast({
+            title: 'Error while updatind the final report',
+            description: 'Please try again',
+            variant: 'destructive',
+          });
+        }
+        console.error(error.message)
+        toast({
+          title: 'Something went wrong',
+          description: 'Please try again',
+          variant: 'destructive',
+        
+        })
+      } 
+
+    } finally {
+      setIsLoading(false)
     }
-    const reportId = response.success.reportId;
-
-    toast({
-      title: 'Data successfully analyzed!',
-      description: 'You will be redirected to the report page',
-      variant: 'default',
-    });
-
-    startTransition(() => {
-      router.push(`/analyze/report?id=${reportId}`);
-    });
   }
 
   return (
@@ -84,9 +152,9 @@ export const SelectDialog = ({
             <Button
               disabled={isPending || columns.length === 0}
               variant="outline"
-              className='w-full lg:w-fit'
+              className="w-full lg:w-fit"
             >
-              {isPending ? (
+              {isPending || isLoading ? (
                 <Loader2 className="animate-spin size-4" />
               ) : (
                 <span>Pick a column</span>
@@ -129,8 +197,15 @@ export const SelectDialog = ({
           </div>
         </DialogHeader>
         <DialogFooter>
-          <Button disabled={isPending} onClick={async () => await analyzeData()}>
-            {isPending ? (<Loader2 className='animate-spin size-4'/>) : <span>Analyze</span>}
+          <Button
+            disabled={isPending}
+            onClick={async () => await analyzeData()}
+          >
+            {isPending || isLoading ? (
+              <Loader2 className="animate-spin size-4" />
+            ) : (
+              <span>Analyze</span>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

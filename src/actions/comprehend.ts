@@ -17,7 +17,7 @@ const comprehendClient = new ComprehendClient({
   },
 });
 
-async function detectDominantLanguage(columnData: string[]) {
+async function detectComprehendDominantLanguage(columnData: string[]) {
   const languageCommand = new BatchDetectDominantLanguageCommand({
     TextList: columnData,
   });
@@ -53,14 +53,14 @@ async function detectDominantLanguage(columnData: string[]) {
   return { success: { dominantLanguage: dominantLanguage } };
 }
 
-export async function analyzeColumnSentiment(
+export async function analyseComprehendColumnSentiment(
   columnData: string[],
-  datasetId: string
+  reportId: string
 ) {
   const session = await auth();
   if (!session || !session.user) return { error: { message: 'Unauthorized' } };
 
-  const language = await detectDominantLanguage(columnData);
+  const language = await detectComprehendDominantLanguage(columnData);
   if (language.error !== undefined)
     return { error: { message: 'Error while detecting language' } };
 
@@ -72,7 +72,6 @@ export async function analyzeColumnSentiment(
   });
 
   const sentimentResponse = await comprehendClient.send(command);
-  //console.log(sentimentResponse.ResultList)
 
   if (
     !sentimentResponse ||
@@ -80,19 +79,6 @@ export async function analyzeColumnSentiment(
     (sentimentResponse.ErrorList?.length ?? 0 > 0)
   )
     return { error: { message: 'Error while detecting sentiment' } };
-
-  const existingReport = await db.report.findUnique({
-    where: {
-      datasetId,
-      userId: session.user.id!,
-    },
-  });
-
-  if (existingReport) {
-    return {
-      error: { message: 'Report already exists', reportId: existingReport.id },
-    };
-  }
 
   const sentimentCounts: { [key: string]: number } = {
     Mixed: 0,
@@ -138,28 +124,20 @@ export async function analyzeColumnSentiment(
   // console.log(`Average sentiment scores:`, averageSentimentScores);
   // console.log(`Final sentiment: ${sentimentResult}`);
 
-  const report = await db.report.create({
+  const analysisResult = await db.analysisResult.create({
     data: {
-      sentiment: sentimentResult,
-      totalTexts: sentimentScores.length,
-      mixedAvgScore: averageSentimentScores.Mixed,
-      negativeAvgScore: averageSentimentScores.Negative,
-      neutralAvgScore: averageSentimentScores.Neutral,
-      positiveAvgScore: averageSentimentScores.Positive,
-      mixedTexts: sentimentCounts.Mixed,
-      negativeTexts: sentimentCounts.Negative,
-      neutralTexts: sentimentCounts.Neutral,
-      positiveTexts: sentimentCounts.Positive,
-      datasetId,
-      userId: session.user.id!,
-    },
-  });
+        service: 'AWS',
+        sentiment: sentimentResult,
+        PositiveAvgScore: averageSentimentScores.Positive,
+        NegativeAvgScore: averageSentimentScores.Negative,
+        NeutralAvgScore: averageSentimentScores.Neutral,
+        MixedAvgScore: averageSentimentScores.Mixed,
+        totalTexts: sentimentCounts.Positive + sentimentCounts.Negative + sentimentCounts.Neutral + sentimentCounts.Mixed,
+        reportId: reportId
+    }
+  })
 
-  if (!report) return { error: { message: 'Could not create report' } };
+  if(!analysisResult) return {error: {message: 'Azure: Error while analysing data'}}
 
-  return {
-    success: {
-      reportId: report.id,
-    },
-  };
+  return { success: { analysisResult: analysisResult } };
 }
