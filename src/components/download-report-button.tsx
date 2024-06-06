@@ -78,7 +78,7 @@ export const DownloadReportButton = ({
         await uploadReportToS3(pdfFile);
       } catch (error) {
         toast({
-          title: 'Failed to generate report',
+          title: 'Error while generating report',
           description: 'Please try again',
           variant: 'destructive',
         });
@@ -103,7 +103,7 @@ export const DownloadReportButton = ({
         link.click();
         link.parentNode!.removeChild(link);
       } catch (error) {
-        toast({
+        return toast({
           title: 'Failed to download report',
           description: 'Please try again',
           variant: 'destructive',

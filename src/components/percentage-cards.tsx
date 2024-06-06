@@ -17,7 +17,6 @@ interface PercentageCardsProps {
 export const PercentageCards = ({sentimentScore}: PercentageCardsProps) => {
   const totalScore = Object.values(sentimentScore).reduce((a, b) => a + b, 0);
   const columns = Object.values(sentimentScore).filter(score => score !== 0).length;
-  console.log(columns)
   
   return (
     <div className={cn('grid gap-4 my-4', {
