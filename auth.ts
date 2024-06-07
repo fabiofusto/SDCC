@@ -16,6 +16,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       return session;
     },
+    async signIn({user, account, profile }) {
+      if (account?.provider === 'cognito' && profile?.email_verified) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    async redirect({url, baseUrl}) {
+      return baseUrl;
+    },
   },
   events: {
     async linkAccount({ user }) {
