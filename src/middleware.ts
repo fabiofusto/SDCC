@@ -19,7 +19,7 @@ const corsOptions: {
   credentials: boolean;
 } = {
   allowedMethods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS'.split(','),
-  allowedOrigins: 'https://cobrainsights.xyz'.split(','),
+  allowedOrigins: process.env.AUTH_URL!.split(','),
   allowedHeaders:
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Authorization, Date, X-Api-Version'.split(
       ','
@@ -65,7 +65,6 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = Object.values(authRoutes).includes(nextUrl.pathname);
 
   const isLoginRoute = nextUrl.pathname === authRoutes.Login;

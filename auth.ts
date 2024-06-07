@@ -14,6 +14,17 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         sameSite: "none",
         path: "/",
         secure: true,
+        domain: process.env.AUTH_URL,
+      },
+    },
+    csrfToken: {
+      name: "authjs.csrf.token",
+      options: {
+        httpOnly: true,
+        sameSite: "none",
+        path: "/",
+        secure: true,
+        domain: process.env.AUTH_URL,
       },
     },
   },
