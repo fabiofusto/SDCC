@@ -12,7 +12,7 @@ const ReportsPage = async () => {
   if (!session || !session.user) {
     return {
       redirect: {
-        destination: '/api/auth/signin/cognito',
+        destination: '/api/auth/signin',
         permanent: false,
       },
     };
