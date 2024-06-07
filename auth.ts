@@ -8,23 +8,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   session: { strategy: 'jwt' },
   cookies: {
     pkceCodeVerifier: {
-      name: "authjs.pkce.code_verifier",
+      name: 'authjs.pkce.code_verifier',
       options: {
         httpOnly: true,
-        sameSite: "none",
-        path: "/",
+        sameSite: 'none',
+        path: '/',
         secure: true,
-        domain: process.env.AUTH_URL,
-      },
-    },
-    csrfToken: {
-      name: "authjs.csrf.token",
-      options: {
-        httpOnly: true,
-        sameSite: "none",
-        path: "/",
-        secure: true,
-        domain: process.env.AUTH_URL,
       },
     },
   },
@@ -34,7 +23,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
     async session({ token, session }) {
       if (token.sub && session.user) session.user.id = token.sub;
-      
+
       return session;
     },
   },
@@ -46,7 +35,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       });
     },
   },
-  debug: process.env.NODE_ENV === "development",
+  debug: process.env.NODE_ENV === 'development',
   logger: {
     error: console.error,
     warn: console.warn,
