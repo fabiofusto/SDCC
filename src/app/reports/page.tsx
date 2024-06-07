@@ -1,17 +1,22 @@
 import { MaxWidthWrapper } from '@/components/max-width-wrapper';
-import { auth, signIn } from '../../../auth';
-import { redirect } from 'next/navigation';
+import { auth } from '../../../auth';
 
 import { ReportCard } from '@/components/report-card';
 import { ErrorBanner } from '@/components/error-not-found';
-import { authRoutes, reportsRoute } from '../../../routes';
 import { getUserReportsAndSentiment } from '@/actions/db';
 
 export const dynamic = 'force-dynamic'
 
 const ReportsPage = async () => {
   const session = await auth();
-  if (!session || !session.user) return await signIn('cognito', { callbackUrl: reportsRoute, redirect: true})
+  if (!session || !session.user) {
+    return {
+      redirect: {
+        destination: '/api/auth/signin/cognito',
+        permanent: false,
+      },
+    };
+  }
 
   const reports = await getUserReportsAndSentiment(session.user.id!);
 

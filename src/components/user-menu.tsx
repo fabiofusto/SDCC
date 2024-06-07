@@ -66,8 +66,8 @@ export const UserProfile = ({ user }: { user: User | undefined }) => {
                   className="p-0"
                   variant={null}
                   size="sm"
-                  onClick={async () => {
-                    await signOut({ callbackUrl: "/", redirect:true})
+                  onClick={() => {
+                    signOut()
                     setIsOpen(!isOpen);
                   }}
                 >
@@ -82,9 +82,9 @@ export const UserProfile = ({ user }: { user: User | undefined }) => {
         <Button
           variant='outline'
           //href={authRoutes.Login}
-          onClick={async () => {
+          onClick={() => {
             try {
-              await signIn('cognito', { callbackUrl: "/", redirect: true })
+              signIn('cognito')
             } catch (error) {
               console.log(error)
             }

@@ -1,16 +1,17 @@
 import { MaxWidthWrapper } from '@/components/max-width-wrapper';
 import { Steps } from '@/components/steps';
 import { ReactNode } from 'react';
-import { auth, signIn } from '../../../auth';
+import { auth } from '../../../auth';
 
 const Layout = async ({ children }: { children: ReactNode }) => {
   const session = await auth();
   if (!session || !session.user) {
-    try {
-      return await signIn('cognito', { callbackUrl: '/analyze', redirect: true});
-    } catch (error) {
-      console.log(error);
-    }
+    return {
+      redirect: {
+        destination: '/api/auth/signin/cognito',
+        permanent: false,
+      },
+    };
   }
 
   return (
