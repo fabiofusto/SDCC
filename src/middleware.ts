@@ -89,15 +89,6 @@ export default auth((req) => {
     return response;
   }
 
-  if (!req.auth && !publicRoutes.includes(nextUrl.pathname)) {
-    return new Response(null, {
-      status: 303,
-      headers: {
-        Location: new URL(authRoutes.Login, nextUrl).toString(),
-      },
-    });
-  }
-
   return response;
 });
 
