@@ -7,6 +7,7 @@ export default {
       clientId: process.env.AUTH_COGNITO_ID,
       clientSecret: process.env.AUTH_COGNITO_SECRET,
       issuer: process.env.AUTH_COGNITO_ISSUER,
+      allowDangerousEmailAccountLinking: true
     }),
   ],
   secret: process.env.AUTH_SECRET,
