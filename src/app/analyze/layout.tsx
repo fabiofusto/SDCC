@@ -7,7 +7,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
   const session = await auth();
   if (!session || !session.user) {
     try {
-      await signIn('cognito');
+      return await signIn('cognito', { callbackUrl: '/analyze', redirect: true});
     } catch (error) {
       console.log(error);
     }

@@ -84,7 +84,7 @@ export const UserProfile = ({ user }: { user: User | undefined }) => {
           //href={authRoutes.Login}
           onClick={async () => {
             try {
-              await signIn('cognito')
+              await signIn('cognito', { callbackUrl: "/", redirect: true })
             } catch (error) {
               console.log(error)
             }
