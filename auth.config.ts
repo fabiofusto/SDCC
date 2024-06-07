@@ -1,7 +1,5 @@
-import Cognito from '@auth/core/providers/cognito';
-import CognitoProvider from 'next-auth/providers/cognito';
-
 import type { NextAuthConfig } from 'next-auth';
+import Cognito from '@auth/core/providers/cognito';
 
 export default {
   providers: [
@@ -9,9 +7,8 @@ export default {
       clientId: process.env.AUTH_COGNITO_ID,
       clientSecret: process.env.AUTH_COGNITO_SECRET,
       issuer: process.env.AUTH_COGNITO_ISSUER,
-      // authorization: { params: { scope: 'email openid profile' } },
-      // checks: ['pkce', 'nonce'],
     }),
   ],
   secret: process.env.AUTH_SECRET,
+  trustHost: true
 } satisfies NextAuthConfig;
