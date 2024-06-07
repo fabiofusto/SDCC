@@ -10,12 +10,11 @@ export const dynamic = 'force-dynamic'
 const ReportsPage = async () => {
   const session = await auth();
   if (!session || !session.user) {
-    return {
-      redirect: {
-        destination: '/api/auth/signin',
-        permanent: false,
-      },
-    };
+    return (
+      <div>
+        <h1>Unauthorized</h1>
+      </div>
+    )
   }
 
   const reports = await getUserReportsAndSentiment(session.user.id!);

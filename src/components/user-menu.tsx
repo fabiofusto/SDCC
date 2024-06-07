@@ -86,6 +86,7 @@ export const UserProfile = ({ user }: { user: User | undefined }) => {
             try {
               signIn('cognito')
             } catch (error) {
+              if(error instanceof Error) console.log(error.message)
               console.log(error)
             }
             setIsOpen(!isOpen)

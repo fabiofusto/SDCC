@@ -12,4 +12,3 @@ export const publicRoutes = [
 export const defaultLoginRedirect = "/"
 
 export const reportsRoute = '/reports'
-export const uploadRoute = '/analyze/upload'
