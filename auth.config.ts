@@ -5,12 +5,12 @@ import type { NextAuthConfig } from 'next-auth';
 
 export default {
   providers: [
-    CognitoProvider({
+    Cognito({
       clientId: process.env.AUTH_COGNITO_ID,
       clientSecret: process.env.AUTH_COGNITO_SECRET,
       issuer: process.env.AUTH_COGNITO_ISSUER,
-      authorization: { params: { scope: 'email openid profile' } },
-      checks: ['pkce', 'nonce'],
+      // authorization: { params: { scope: 'email openid profile' } },
+      // checks: ['pkce', 'nonce'],
     }),
   ],
   secret: process.env.AUTH_SECRET,
