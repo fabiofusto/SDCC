@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { parseData } from '@/lib/utils';
 import axios from 'axios';
 import { getDatasetFromS3 } from '@/actions/s3';
-import { auth } from '../../../../auth';
+import { auth } from '../../../../../auth';
 
 interface SelectPageProps {
   searchParams: {

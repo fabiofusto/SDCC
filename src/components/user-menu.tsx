@@ -16,10 +16,11 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { type User } from 'next-auth';
-import { authRoutes, reportsRoute } from '../../routes';
+import { authPage, defaultLoginRedirect, reportsRoute } from '../../routes';
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
-import { signIn, signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
+import Image from 'next/image';
 
 export const UserProfile = ({ user }: { user: User | undefined }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -37,7 +38,7 @@ export const UserProfile = ({ user }: { user: User | undefined }) => {
           >
             <Avatar className="cursor-pointer">
               <AvatarFallback>
-                <UserIcon className="size-5" />
+                {user.image ? <Image src={user.image} fill alt='user image' /> : (<UserIcon className="size-5" />)}
               </AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
@@ -67,7 +68,7 @@ export const UserProfile = ({ user }: { user: User | undefined }) => {
                   variant={null}
                   size="sm"
                   onClick={() => {
-                    signOut()
+                    signOut({ callbackUrl: defaultLoginRedirect})
                     setIsOpen(!isOpen);
                   }}
                 >
@@ -81,14 +82,8 @@ export const UserProfile = ({ user }: { user: User | undefined }) => {
       ) : (
         <Button
           variant='outline'
-          //href={authRoutes.Login}
           onClick={() => {
-            try {
-              signIn('cognito')
-            } catch (error) {
-              if(error instanceof Error) console.log(error.message)
-              console.log(error)
-            }
+            router.push(authPage)
             setIsOpen(!isOpen)
           }}
         >

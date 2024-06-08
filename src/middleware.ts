@@ -5,6 +5,7 @@ import {
   authRoutes,
   publicRoutes,
   apiAuthPrefix,
+  authPage,
 } from '../routes';
 import { NextResponse } from 'next/server';
 
@@ -65,7 +66,7 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isAuthRoute = Object.values(authRoutes).includes(nextUrl.pathname);
+  const isAuthRoute = Object.values(authRoutes).includes(nextUrl.pathname) || nextUrl.pathname.startsWith(authPage);
 
   const isLoginRoute = nextUrl.pathname === authRoutes.Login;
   const isLogoutRoute = nextUrl.pathname === authRoutes.Logout;
@@ -77,7 +78,7 @@ export default auth((req) => {
   }
 
   if (isAuthRoute) {
-    if (isLoggedIn && isLoginRoute) {
+    if ((isLoggedIn && isLoginRoute) || (isLoggedIn && nextUrl.pathname.startsWith(authPage))) {
       return new Response(null, {
         status: 303,
         headers: {

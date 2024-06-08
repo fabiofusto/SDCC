@@ -1,21 +1,17 @@
 import { MaxWidthWrapper } from '@/components/max-width-wrapper';
-import { auth } from '../../../auth';
+import { auth } from '../../../../auth';
 
 import { ReportCard } from '@/components/report-card';
 import { ErrorBanner } from '@/components/error-not-found';
 import { getUserReportsAndSentiment } from '@/actions/db';
+import { redirect } from 'next/navigation';
+import { authPage } from '../../../../routes';
 
 export const dynamic = 'force-dynamic'
 
 const ReportsPage = async () => {
   const session = await auth();
-  if (!session || !session.user) {
-    return (
-      <div>
-        <h1>Unauthorized</h1>
-      </div>
-    )
-  }
+  if (!session || !session.user) redirect(authPage)
 
   const reports = await getUserReportsAndSentiment(session.user.id!);
 
