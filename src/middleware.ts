@@ -20,7 +20,7 @@ const corsOptions: {
   credentials: boolean;
 } = {
   allowedMethods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS'.split(','),
-  allowedOrigins: process.env.AUTH_URL!.split(','),
+  allowedOrigins: [process.env.AUTH_URL!],
   allowedHeaders:
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Authorization, Date, X-Api-Version'.split(
       ','
