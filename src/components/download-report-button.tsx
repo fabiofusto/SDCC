@@ -45,6 +45,7 @@ export const DownloadReportButton = ({
       .put(url, file, {
         headers: {
           'Content-Type': file.type,
+          'Access-Control-Allow-Origin': process.env.AUTH_URL
         },
       })
       .catch((error) => {

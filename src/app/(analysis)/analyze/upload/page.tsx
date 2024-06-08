@@ -49,6 +49,7 @@ const UploadPage = () => {
         .put(url, file, {
           headers: {
             'Content-Type': file.type,
+            'Access-Control-Allow-Origin': process.env.AUTH_URL
           },
           onUploadProgress: (e) => {
             setUploadProgress(Math.round((e.loaded * 100) / e.total!));

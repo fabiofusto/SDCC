@@ -21,9 +21,13 @@ const SelectPage = async ({ searchParams }: SelectPageProps) => {
   if (!id || typeof id !== 'string') return notFound();
 
   const signedURL = await getDatasetFromS3(id);
-  if (signedURL.error !== undefined) return notFound();
+  if (signedURL.error !== undefined) {
+    console.log(signedURL.error)
+    return notFound()
+  };
 
   const response = await axios.get(signedURL.success.url).catch((error) => {
+    console.log(error.message)
     return notFound();
   });
 
