@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        remotePatterns: ['lh3.googleusercontent.com']
+        remotePatterns: [{
+            hostname: "lh3.googleusercontent.com"
+        }],
     }
 };
 
