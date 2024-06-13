@@ -29,9 +29,7 @@ import { Loader2 } from 'lucide-react';
 import {
   analyseAzureColumnSentiment,
 } from '@/actions/azure';
-import { db } from '@/lib/db';
 import { createReport, updateReport } from '@/actions/db';
-import { Report } from '@prisma/client';
 
 interface SelectDialogProps {
   columns: {
@@ -89,7 +87,7 @@ export const SelectDialog = ({
       if (!updatedReport) throw new Error('Error while updating report');
   
       toast({
-        title: 'Data successfully analyzed!',
+        title: 'Data successfully analysed!',
         description: 'You will be redirected to the report page',
         variant: 'default',
       });
@@ -165,10 +163,10 @@ export const SelectDialog = ({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Pick a column to analyze data</DialogTitle>
+          <DialogTitle>Pick a column to analyse data</DialogTitle>
           <DialogDescription>
             You can only choose one column. The system will automatically
-            analyze the sentiment in your data and show you a final report
+            analyse the sentiment in your data and show you a final report
           </DialogDescription>
           <div className="w-full">
             <Select
@@ -204,7 +202,7 @@ export const SelectDialog = ({
             {isPending || isLoading ? (
               <Loader2 className="animate-spin size-4" />
             ) : (
-              <span>Analyze</span>
+              <span>Analyse</span>
             )}
           </Button>
         </DialogFooter>
