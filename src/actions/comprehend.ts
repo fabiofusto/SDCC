@@ -137,7 +137,7 @@ export async function analyseComprehendColumnSentiment(
     }
   })
 
-  if(!analysisResult) return {error: {message: 'Azure: Error while analysing data'}}
+  if(!analysisResult) return {error: {message: 'AWS: Error while analysing data'}}
 
   return { success: { analysisResult: analysisResult } };
 }
