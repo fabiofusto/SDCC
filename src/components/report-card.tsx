@@ -47,9 +47,12 @@ export const ReportCard = ({ report }: ReportCardProps) => {
     return acc;
   }, {} as Record<string, number>); 
 
-  const mostOccurringSentiment = Object.keys(sentimentCounts).reduce((a, b) =>
-    sentimentCounts[a] > sentimentCounts[b] ? a : b
-  );
+  let mostOccurringSentiment = Object.keys(sentimentCounts).reduce((a, b) =>
+    sentimentCounts[a] > sentimentCounts[b] ? a : b, '');
+  
+  if (Object.keys(sentimentCounts).length === 0) {
+    mostOccurringSentiment = 'Neutral'
+  }
 
     return (
       <Card>
