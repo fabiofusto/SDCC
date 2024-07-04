@@ -18,7 +18,8 @@ export const computeSHA256 = async (file: File) => {
 };
 
 export const parseData = (data: string) => {
-  const rows: string[] = data.split('\r\n');
+  const uniformNewLines = data.replace(/\r\n|\r/g, '\n');
+  const rows: string[] = uniformNewLines.split('\n');
   let table: string[][] = rows.map((row) => row.split(';'));
   table = table.filter((row) => row.some((field) => field !== ''));
   return table;
