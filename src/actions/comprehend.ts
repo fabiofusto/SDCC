@@ -119,11 +119,6 @@ export async function analyseComprehendColumnSentiment(
     averageSentimentScores[a] > averageSentimentScores[b] ? a : b
   );
 
-  // console.log(`Total texts analyzed: ${sentimentScores.length}`);
-  // console.log(`Number of texts per sentiment:`, sentimentCounts);
-  // console.log(`Average sentiment scores:`, averageSentimentScores);
-  // console.log(`Final sentiment: ${sentimentResult}`);
-
   const analysisResult = await db.analysisResult.create({
     data: {
         service: 'AWS',

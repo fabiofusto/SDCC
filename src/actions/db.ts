@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from "@/lib/db";
-import { AnalysisResult, Report } from "@prisma/client";
+import { AnalysisResult } from "@prisma/client";
 
 export const createReport = async (datasetId:string, userId: string) => {
     const report = await db.report.create({

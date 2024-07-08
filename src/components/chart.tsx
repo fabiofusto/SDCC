@@ -1,6 +1,5 @@
 'use client';
 
-import { AnalysisResult } from '@prisma/client';
 import {
   Tooltip,
   ResponsiveContainer,

@@ -24,8 +24,6 @@ interface DatasetProps {
 }
 
 export const Dataset = ({ headers, body, datasetId, userId }: DatasetProps) => {
-  //TODO: Add loading state with skeleton
-
   return (
     <MaxWidthWrapper className="flex flex-col items-center">
         <ScrollArea className="h-[400px] w-full mt-6">

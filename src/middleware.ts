@@ -2,10 +2,8 @@ import authConfig from '../auth.config';
 import NextAuth from 'next-auth';
 import {
   defaultLoginRedirect,
-  authRoutes,
-  publicRoutes,
-  apiAuthPrefix,
-  authPage,
+  authRoutes, apiAuthPrefix,
+  authPage
 } from '../routes';
 import { NextResponse } from 'next/server';
 
@@ -70,8 +68,6 @@ export default auth((req) => {
 
   const isLoginRoute = nextUrl.pathname === authRoutes.Login;
   const isLogoutRoute = nextUrl.pathname === authRoutes.Logout;
-
-  //console.log({isLoggedIn, isAuthRoute, isApiAuthRoute})
 
   if (isApiAuthRoute && !isLoginRoute && !isLogoutRoute) {
     return response;

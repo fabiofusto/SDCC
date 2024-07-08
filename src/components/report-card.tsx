@@ -10,7 +10,6 @@ import {
 import { buttonVariants } from '@/components/ui/button';
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
-import { AnalysisResult, Report } from '@prisma/client';
 import { DownloadReportButton } from './download-report-button';
 import { sentimentDisplay } from '@/constants';
 import { DownloadDatasetButton } from './download-dataset-button';

@@ -4,7 +4,7 @@ import { Loader2, Table } from 'lucide-react';
 import { Button } from './ui/button';
 import { useState } from 'react';
 import axios from 'axios';
-import { getDatasetFromS3, getReportFromS3 } from '@/actions/s3';
+import { getDatasetFromS3 } from '@/actions/s3';
 import { useToast } from './ui/use-toast';
 
 interface Props {

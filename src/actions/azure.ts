@@ -1,8 +1,7 @@
 'use server';
 
 import {
-    AzureKeyCredential, SentimentAnalysisSuccessResult,
-    TextAnalysisClient
+  AzureKeyCredential, TextAnalysisClient
 } from '@azure/ai-language-text';
 import { auth } from '../../auth';
 import { db } from '@/lib/db';
